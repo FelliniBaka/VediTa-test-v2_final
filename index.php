@@ -3,7 +3,7 @@
 // Разово созданём таблицу посредством php
 //
 
-  $sql = 'CREATE TABLE IF NOT EXISTS `Products` (
+$sql = 'CREATE TABLE IF NOT EXISTS `Products` (
     `id` INT(6) NOT NULL Primary KEY AUTO_INCREMENT,
     `product_id` INT(6) NOT NULL,
     `product_name` VARCHAR(40) NOT NULL,
@@ -44,14 +44,14 @@ for ($z = 1; $z < 15 ; $z++){
     return $sth->fetchAll();
 }*/
 spl_autoload_register(
-        function($class) {
-            include ($class . '.php');
-        }
+    function ($class) {
+        include($class . '.php');
+    }
 );
 $products = new Cproducts();
 
 $productsTable = $products->getTable();
-$productsTableFiltered = $products->getTable('`id`>6 AND `product_price`<10000');
+$productsTableFiltered = $products->getTable('`product_price`<10000 AND `product_quantity`>0', 5);
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,58 +61,58 @@ $productsTableFiltered = $products->getTable('`id`>6 AND `product_price`<10000')
     <script src="myscript.js"></script>
 </head>
 <body>
-    <div class="mainConteiner">
-        <table class="mainTable">
-            <tr>
-                <td colspan="7">
-                    <h2>Whole table</h2>
-                </td>
-            </tr>
-                <?php $products->createHeaderRow() ?>
-                <?php foreach ($productsTable as $product): ?>
-            <tr data-productId="<?= $product['id'] ?>" class="productRow">
-                <?php for ($i = 0; $i < 5; $i++): ?>
-            <td class="productColumn"><?= $product[$i] ?></td> <!-- x6 -->
-                <?php endfor ?>
-                <td class="productColumn">
-                    <button class="minus">-</button>
-                    <span><?= $product['product_quantity'] ?></span>
-                    <button class="plus">+</button>
-                </td>
-                <td class="productColumn">
-                    <?= $product['date_create'] ?>
-                    <br>
-                    <button class="hideButton">Скрыть</button>
-                </td>
-            </tr>
-                <?php endforeach ?>
-        </table>
-        <table class="mainTable">
-            <tr>
-                <td colspan="7">
-                    <h2>Filtered table</h2>
-                </td>
-            </tr>
-            <?php $products->createHeaderRow() ?>
-            <?php foreach ($productsTableFiltered as $product): ?>
-                <tr data-productId="<?= $product['id'] ?>" class="productRow">
-                    <?php for ($i = 0; $i < 5; $i++): ?>
-                        <td class="productColumn"><?= $product[$i] ?></td> <!-- x6 -->
-                    <?php endfor ?>
-                    <td class="productColumn">
-                        <button class="minus">-</button>
-                        <span><?= $product['product_quantity'] ?></span>
-                        <button class="plus">+</button>
-                    </td>
-                    <td class="productColumn">
-                        <?= $product['date_create'] ?>
-                        <br>
-                        <button class="hideButton">Скрыть</button>
-                    </td>
-                </tr>
-            <?php endforeach ?>
-        </table>
-    </div>
-    <button id="revealAllButton">Reveal hidden</button>
+<table class="mainTable">
+    <tr>
+        <td colspan="7">
+            <h2>Whole table</h2>
+        </td>
+    </tr>
+    <?php $products->createHeaderRow() ?>
+    <?php foreach ($productsTable as $product): ?>
+        <tr data-productId="<?= $product['id'] ?>" class="productRow">
+            <?php for ($i = 0; $i < 5; $i++): ?>
+                <td class="productColumn"><?= $product[$i] ?></td> <!-- x6 -->
+            <?php endfor ?>
+            <td class="productColumn">
+                <button class="minus">-</button>
+                <span><?= $product['product_quantity'] ?></span>
+                <button class="plus">+</button>
+            </td>
+            <td class="productColumn">
+                <?= $product['date_create'] ?>
+                <br>
+                <button class="hideButton">Скрыть</button>
+            </td>
+        </tr>
+    <?php endforeach ?>
+</table>
+<br>
+<button id="revealAllButton">Reveal hidden</button>
+<br>
+<table class="mainTable">
+    <tr>
+        <td colspan="7">
+            <h2>Filtered table</h2>
+        </td>
+    </tr>
+    <?php $products->createHeaderRow() ?>
+    <?php foreach ($productsTableFiltered as $product): ?>
+        <tr data-productId="<?= $product['id'] ?>" class="productRow">
+            <?php for ($i = 0; $i < 5; $i++): ?>
+                <td class="productColumn"><?= $product[$i] ?></td> <!-- x6 -->
+            <?php endfor ?>
+            <td class="productColumn">
+                <button class="minus">-</button>
+                <span><?= $product['product_quantity'] ?></span>
+                <button class="plus">+</button>
+            </td>
+            <td class="productColumn">
+                <?= $product['date_create'] ?>
+                <br>
+                <button class="hideButton">Скрыть</button>
+            </td>
+        </tr>
+    <?php endforeach ?>
+</table>
 </body>
 </html>

@@ -4,11 +4,9 @@ body {
     font-weight: normal;
 }
 .mainTable {
-    display: flex;
     border: 1px solid black;
     border-collapse: collapse;
     text-align: center;
-    align-self: flex-start;
 }
 
 .tableHeaderRow {
@@ -30,9 +28,4 @@ body {
     border: 1px solid black;
     font-size: 16px;
 
-}
-
-.mainConteiner{
-    display: flex;
-    flex-direction: row;
 }
