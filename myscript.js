@@ -1,50 +1,50 @@
 'use strict';
 
+function hideProduct(workObject){
+    workObject.parentElement.parentElement.remove();
+}
+
+function revealAll(){
+    window.location = window.location;
+}
+
+function changeValue(workObject){
+    let valueContainer = workObject.parentElement.querySelector("span");
+    if (workObject.className === 'plus'){
+        valueContainer.innerText = (parseInt(valueContainer.innerText)+1).toString();
+    } else {
+        valueContainer.innerText = (parseInt(valueContainer.innerText)-1).toString();
+    }
+}
+
+function createRequest(actionFunc, requestBody) {
+    let httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = function(){
+        if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+            actionFunc();
+        }
+    };
+
+    httpRequest.open("POST", "ajax_handler.php");
+    httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    httpRequest.send(requestBody);
+}
 
 function sendHideProductRequest () {
     const button = this;
-    let httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = function(){
-        if (httpRequest.readyState === 4 && httpRequest.status === 200){
-            button.parentElement.parentElement.remove();
-        }
-    };
     let id = this.parentElement.parentElement.dataset.productid;
-    httpRequest.open("POST", "ajax_handler.php");
-    httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    httpRequest.send("ajax_id="+id);
+    createRequest(hideProduct(button),"ajax_id="+id)
 }
 
 function sendRevealAllRequest() {
-    let httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = function(){
-        if (httpRequest.readyState === 4 && httpRequest.status === 200){
-            window.location = window.location;
-        }
-    };
-    httpRequest.open("POST", "ajax_handler.php");
-    httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    httpRequest.send("revealAll");
-
+    createRequest(revealAll(),"revealAll");
 }
 
 function sendChangeQuantityRequest(){
-    const button = this;
-    let httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = function(){
-        if (httpRequest.readyState === 4 && httpRequest.status === 200){
-        let valueContainer = button.parentElement.querySelector("span");
-            if (button.className === 'plus'){
-                valueContainer.innerText = (parseInt(valueContainer.innerText)+1).toString();
-            } else {
-                valueContainer.innerText = (parseInt(valueContainer.innerText)-1).toString();
-            }
-        }
-    };
+    const workObject = this;
     let id = this.parentElement.parentElement.dataset.productid;
-    httpRequest.open("POST", "ajax_handler.php");
-    httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    httpRequest.send("ajax_id="+id+"&change="+this.className);
+    createRequest(changeValue(workObject),"ajax_id="+id+"&change="+this.className);
+
 }
 
 function addListeners() {
