@@ -4,8 +4,8 @@ function hideProduct(workObject){
     workObject.parentElement.parentElement.remove();
 }
 
-function revealAll(){
-    window.location = window.location;
+function refreshPage(){
+    document.location.reload(true);
 }
 
 function changeValue(workObject){
@@ -37,7 +37,7 @@ function sendHideProductRequest () {
 }
 
 function sendRevealAllRequest() {
-    createRequest(revealAll(),"revealAll");
+    createRequest(refreshPage,"revealAll");
 }
 
 function sendChangeQuantityRequest(){
