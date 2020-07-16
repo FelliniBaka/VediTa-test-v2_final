@@ -31,17 +31,21 @@ for ($z = 1; $z < 15 ; $z++){
 
 // Имплементирована в классе CProducts
 
-/*function getWholeTable ($filterString=null, $limit=15, $tableName='`Products`'): ?array
+/*function getTable ($minPrice=null, $limit=null): ?array
 {
+    $tableName = '`Products`';
+
     $db = new \PDO('mysql:host=localhost;dbname=vedita_test_v2',
         'root',
         '');
-    if ($filterString == null){
-        $sth = $db->query('SELECT * FROM '.$tableName.'ORDER BY `DATE_CREATE` DESC, `ID` DESC LIMIT '.$limit);
+    if (null === $minPrice && null === $limit){
+        $sth = $db->query('SELECT * FROM '.$tableName.' WHERE `is_hidden` = 0 ORDER BY `DATE_CREATE` DESC, `ID` DESC;');
         return $sth ? $sth->fetchAll() : null;
     }
-    $sth = $db->query('SELECT * FROM '.$tableName.' WHERE '.$filterString.' ORDER BY `DATE_CREATE` DESC,`ID` DESC LIMIT '.$limit.';');
-    return $sth->fetchAll();
+    $minPrice = $minPrice ? : 0;
+    $limit = $limit ? " LIMIT ".$limit.';' : ";" ;
+    $sth = $db->query('SELECT * FROM '.$tableName.' WHERE `product_price`>'.$minPrice.' AND `is_hidden` = 0 ORDER BY `DATE_CREATE` DESC,`ID` DESC'.$limit);
+    return $sth ? $sth->fetchAll() : null;
 }*/
 spl_autoload_register(
     function ($class) {
@@ -51,7 +55,7 @@ spl_autoload_register(
 $products = new Cproducts();
 
 $productsTable = $products->getTable();
-$productsTableFiltered = $products->getTable('`product_price`<10000 AND `product_quantity`>0', 5);
+$productsTableFiltered = $products->getTable( '',5);
 ?>
 <!DOCTYPE html>
 <html>
@@ -71,7 +75,7 @@ $productsTableFiltered = $products->getTable('`product_price`<10000 AND `product
     <?php foreach ($productsTable as $product): ?>
         <tr data-productId="<?= $product['id'] ?>" class="productRow">
             <?php for ($i = 0; $i < 5; $i++): ?>
-                <td class="productColumn"><?= $product[$i] ?></td> <!-- x6 -->
+                <td class="productColumn"><?= $product[$i] ?></td>
             <?php endfor ?>
             <td class="productColumn">
                 <button class="minus">-</button>

@@ -12,17 +12,18 @@ class CProducts
             '');
     }
 
-    public function getTable ($filterString=null, $limit=15): ?array
+    public function getTable ($minPrice=null, $limit=null): ?array
     {
         $tableName = '`Products`';
 
-        if ($filterString == null){
-            $sth = $this->db->query('SELECT * FROM '.$tableName.' WHERE `is_hidden` = 0 ORDER BY `DATE_CREATE` DESC, `ID` DESC LIMIT '.$limit);
+        if (null === $minPrice && null === $limit){
+            $sth = $this->db->query('SELECT * FROM '.$tableName.' WHERE `is_hidden` = 0 ORDER BY `DATE_CREATE` DESC, `ID` DESC;');
             return $sth ? $sth->fetchAll() : null;
         }
-
-        $sth = $this->db->query('SELECT * FROM '.$tableName.' WHERE '.$filterString.' AND `is_hidden` = 0 ORDER BY `DATE_CREATE` DESC,`ID` DESC LIMIT '.$limit.';');
-        return $sth->fetchAll();
+        $minPrice = $minPrice ? : 0;
+        $limit = $limit ? " LIMIT ".$limit.';' : ";" ;
+        $sth = $this->db->query('SELECT * FROM '.$tableName.' WHERE `product_price`>'.$minPrice.' AND `is_hidden` = 0 ORDER BY `DATE_CREATE` DESC,`ID` DESC'.$limit);
+        return $sth ? $sth->fetchAll() : null;
     }
 
     public function createHeaderRow(){
