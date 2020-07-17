@@ -44,11 +44,11 @@ class CProducts
     }
 
     public function hideProduct($id){
-        $this->db->query('UPDATE `products` SET `is_hidden` = 1 WHERE `id` = '.$id.';');
+        $this->db->exec('UPDATE `products` SET `is_hidden` = 1 WHERE `id` = '.$id.';');
     }
 
     public function discloseHiddenProducts(){
-        $this->db->query('UPDATE `products` SET `is_hidden` = 0 WHERE `is_hidden` = 1;');
+        $this->db->exec('UPDATE `products` SET `is_hidden` = 0 WHERE `is_hidden` = 1;');
     }
 
     public function changeValue($change, $id){
@@ -57,6 +57,6 @@ class CProducts
         } else {
             $change = '-';
         }
-        $this->db->query('UPDATE `products` SET `product_quantity` = `product_quantity`'.$change.'1 WHERE `id` = '. $id.';');
+        $this->db->exec('UPDATE `products` SET `product_quantity` = `product_quantity`'.$change.'1 WHERE `id` = '. $id.';');
     }
 }
